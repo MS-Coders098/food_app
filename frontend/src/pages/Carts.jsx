@@ -31,7 +31,7 @@ const Carts = ({ isLoggedIn, user }) => {
 
   useEffect(() => {
     dispatch(AsyncGetCart())
-  }, [loggedInUserCarts])
+  }, [dispatch])
 
 
   const handleUpdateUser = (e) => {
@@ -58,7 +58,10 @@ const Carts = ({ isLoggedIn, user }) => {
     }
   }
 
-
+  const handleRemove = () => {
+    dispatch(AsyncClearCat())
+    navigate("/products")
+  }
 
   return user && loggedInUserCarts ? (
     <main className='w-full min-h-screen overflow-hidden'>
@@ -126,7 +129,7 @@ const Carts = ({ isLoggedIn, user }) => {
           <h3 className='text-xl font-semibold mdsm:text-lg px-3'>Your Current Address: <span className='font-bold'> &nbsp;{user?.address}</span></h3>
           <div id="parent-btns" className='flex justify-center xsm:flex-col'>
             <button onClick={() => navigate("/products")} className='py-4 px-3 bg-green-600 m-3 text-white rounded-lg font-semibold'>Check Products</button>
-            <button onClick={() => dispatch(AsyncClearCat())} className='py-4 px-3 bg-red-600 m-3 text-white rounded-lg font-semibold'>Clear Cart</button>
+            <button onClick={handleRemove} className='py-4 px-3 bg-red-600 m-3 text-white rounded-lg font-semibold'>Clear Cart</button>
           </div>
         </div>
 

@@ -4,27 +4,35 @@ import { FaPlusCircle } from "react-icons/fa";
 import axios from "../utils/axios"
 import { useDispatch } from 'react-redux';
 import { AsyncRemoveCart } from '../store/actions/cartAction';
+import { useNavigate } from 'react-router-dom';
 
 const CartItem = ({ item }) => {
   const [quantity, setquantity] = useState()
+  const [state, setstate] = useState(1)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     setquantity(item.products[0].quantity)
   }, [item])
 
   const updateQuantity = () => {
-    setquantity(quantity + 1)
+    setquantity(quantity => quantity + 1)
   }
 
   const handleOrder = (id) => {
     try {
-      axios.post("/order", {id, quantity})
+      axios.post("/order", { id, quantity })
         .then(res => alert(res.data))
         .catch(err => console.log(err))
     } catch (error) {
       console.log(error.message)
     }
+  }
+
+  const handleClearCart = () => {
+    dispatch(AsyncRemoveCart(item._id))
+    navigate("/products")
   }
 
   return (
@@ -53,8 +61,8 @@ const CartItem = ({ item }) => {
             </div>
           </div>
           <div id="btns" className='flex xsm:flex-col'>
-          <button onClick={() => handleOrder(product.productId.id)} className='py-4 px-3 bg-green-600 m-3 text-white rounded-lg font-semibold'>Order Now</button>
-          <button onClick={() => dispatch(AsyncRemoveCart(item._id))} className='py-4 px-3 bg-red-600 m-3 text-white rounded-lg font-semibold'>Remove From Cart</button>
+            <button onClick={() => handleOrder(product.productId.id)} className='py-4 px-3 bg-green-600 m-3 text-white rounded-lg font-semibold'>Order Now</button>
+            <button onClick={handleClearCart} className='py-4 px-3 bg-red-600 m-3 text-white rounded-lg font-semibold'>Remove From Cart</button>
           </div>
         </section>
       })}
